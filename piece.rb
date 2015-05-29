@@ -2,9 +2,9 @@ class Piece
 
 	attr_accessor :color, :position
 
-  def initialize
-  	@color = color
-  	@position = position
+  def initialize(args)
+  	@color = args[:color].to_sym
+  	@position = args[:position]
   end
 
   def white
@@ -37,18 +37,18 @@ class Piece
 
 end
 
-w = Piece.new
-p w.white
-p w.white?
-p w.oppposite_color
-# p w.opponent?()
-# p w.ally?()
+# w = Piece.new
+# p w.white
+# p w.white?
+# p w.oppposite_color
+# # p w.opponent?()
+# # p w.ally?()
 
-p '--------'
-b = Piece.new
-p b.black
-p b.black?
-p b.oppposite_color
-# p b.opponent?()
-# p b.ally?()
+# p '--------'
+# b = Piece.new
+# p b.black
+# p b.black?
+# p b.oppposite_color
+# # p b.opponent?()
+# # p b.ally?()
 
