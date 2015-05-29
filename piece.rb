@@ -8,19 +8,19 @@ class Piece
   end
 
   def white
-  	@color = "White"
+  	@color = :w
   end
 
   def white?
-  	@color == "White"
+  	@color == :w
   end
 
   def black
-  	@color = "Black"
+  	@color = :b
   end
 
   def black?
-  	@color == "Black"
+  	@color == :b
   end
 
   def oppposite_color
@@ -41,14 +41,14 @@ w = Piece.new
 p w.white
 p w.white?
 p w.oppposite_color
-p w.opponent?()
-p w.ally?()
+# p w.opponent?()
+# p w.ally?()
 
 p '--------'
 b = Piece.new
 p b.black
 p b.black?
 p b.oppposite_color
-p b.opponent?()
-p b.ally?()
+# p b.opponent?()
+# p b.ally?()
 
