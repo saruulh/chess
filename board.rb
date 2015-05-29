@@ -98,7 +98,7 @@ class Board
         get_valid_moves(delta)
       end
     else
-      move_vector = piece.get_move_vector
+      move_vector = piece.getto move_vector
       move_vector.each do |delta|
         @valid_moves << get_valid_moves(delta)
       end
