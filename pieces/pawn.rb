@@ -22,3 +22,5 @@ class Pawn < Piece
 
 end
 
+
+
