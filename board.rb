@@ -1,4 +1,4 @@
-require_relative 'pieces' #update accordingly
+require_relative 'pieces/' #update accordingly
 
 class Board
 
@@ -33,8 +33,10 @@ class Board
   def in_check?
     valid_moves = []
     @board.each do |position, piece|
+      king_pos = piece.color == :w ? white_King_pos : black_King_pos
       if piece.opponent?
         valid_moves << piece.valid_move_loop
-        board[king_pos].check =valid_moves.includes?(king_pos) #verify the color of king
+        board[king_pos].check = valid_moves.includes?(king_pos)
   end
+
 end
