@@ -112,5 +112,42 @@ class Board
       if piece.opponent?
         valid_moves << piece.valid_move_loop
         board[king_pos].check = valid_moves.includes?(king_pos)
+      end
+    end
   end
+
+  def to_s
+    arr = []
+    counter = 8
+    @board.each do |position, piece|
+      if piece
+        arr << icon(piece)
+      else
+        arr << ""
+    end
+    disp_arr = arr.each_slice(8).to_a.reverse
+    8.times do |row|
+      print "#{counter}  " + row.join('  ') + "\n"
+      counter -= 1
+    end
+    print "   a  b  c  d  e  f  g  h "
+  end
+
+  def icon(piece)
+    if piece.color == :w
+      "♔" if piece.kind_of?(King)
+      "♕" if piece.kind_of?(Queen)
+      "♗" if piece.kind_of?(Bishop)
+      "♖" if piece.kind_of?(Rook)
+      "♘" if piece.kind_of?(Knight)
+      "♙" if piece.kind_of?(Pawn)
+    else
+      "♚" if piece.kind_of?(King)
+      "♛" if piece.kind_of?(Queen)
+      "♝" if piece.kind_of?(Bishop)
+      "♜" if piece.kind_of?(Rook)
+      "♞" if piece.kind_of?(Knight)
+      "♟" if piece.kind_of?(Pawn)
+      end
+    end
 end
