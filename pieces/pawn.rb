@@ -3,7 +3,8 @@ require_relative '../board'
 
 class Pawn < Piece
 
-  attr_reader :curr_pos, :color
+  attr_accessor :curr_pos
+  attr_reader :color
 
   def initialize(args)
     @curr_pos = args[:curr_pos]

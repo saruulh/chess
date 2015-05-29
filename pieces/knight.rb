@@ -3,6 +3,9 @@ require_relative '../board'
 
 class Knight < Piece
 
+  attr_accessor :curr_pos
+  attr_reader :color
+
   def initialize(args)
     @curr_pos = args[:curr_pos]
     @color = args[:color].to_sym
