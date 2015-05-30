@@ -193,6 +193,7 @@ class Board
   end
 
   def to_s
+    system "clear"
     arr = []
     disp_arr = []
     @board.each do |position, piece|

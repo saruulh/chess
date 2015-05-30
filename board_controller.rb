@@ -47,6 +47,7 @@ class BoardController
         next_pos = gets.chomp.to_i
         until (valid_moves.include?(next_pos)) do
           @view.select_valid_move
+          next_pos = gets.chomp.to_i
         end
         if valid_moves.include?(next_pos)
           @board.board[pos] = nil
