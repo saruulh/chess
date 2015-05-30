@@ -7,11 +7,13 @@ require_relative 'pieces/king'
 
 class Board
 
-  attr_accessor :board, :whose_turn, :valid_moves, :white_king_pos, :black_king_pos
+  attr_accessor :board, :whose_turn, :valid_moves, :white_king_pos, :black_king_pos, :captured, :king_pos
 
   def initialize (white_king_pos = 4, black_king_pos = 60)
     @valid_moves = []
     @whose_turn = :white
+    @king_pos = { white: 4, black: 60 }
+    @captured = []
     @board = {
       0 => Rook.new(color: "white", curr_pos: 0),
       1 => Knight.new(color: "white", curr_pos: 1),
@@ -178,14 +180,16 @@ class Board
   end
 
   def in_check?
-    valid_moves = []
+    # valid_moves = []
+    color_to_check = @whose_turn == :white ? :black : :white
+    king_pos = @king_pos[@whose_turn]
     @board.each do |position, piece|
-      king_pos = piece.color == :white ? white_king_pos : black_king_pos
-      if piece.opponent?hite
-        valid_moves << piece.valid_move_loop
-        board[king_pos].check = valid_moves.include?(king_pos)
+      if piece && (piece.color == color_to_check)
+        valid_move_loop(piece)
+        return true if @valid_moves.include?(king_pos)
       end
     end
+    return false
   end
 
   def to_s
