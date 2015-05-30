@@ -141,7 +141,6 @@ class Board
         elsif moving_forward && (@board[new_pos].opponent?(piece) || @board[new_pos].ally?(piece))
           return
         elsif @board[new_pos].opponent?(piece)
-          p @board[new_pos].opponent?(piece)
           @valid_moves << new_pos
         elsif @board[new_pos].ally?(piece)
           return
@@ -180,7 +179,7 @@ class Board
   end
 
   def in_check?
-    # valid_moves = []
+    @valid_moves = []
     color_to_check = @whose_turn == :white ? :black : :white
     king_pos = @king_pos[@whose_turn]
     @board.each do |position, piece|

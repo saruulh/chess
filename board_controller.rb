@@ -52,6 +52,7 @@ class BoardController
         if valid_moves.include?(next_pos)
           @board.board[pos] = nil
           capture = @board.board[next_pos]
+
           @board.board[next_pos] = piece
           piece.curr_pos = next_pos
 
@@ -61,6 +62,7 @@ class BoardController
           king_still_in_check = @board.in_check?
           if king_still_in_check
             # UNDO EVERYTHING AND REPEAT
+            @board.king_pos[piece.color] = pos if piece.kind_of?(King)
             piece.curr_pos = pos
             if capture
               @board.board[next_pos] = capture
@@ -93,6 +95,7 @@ class BoardController
       @board.whose_turn = @board.whose_turn == :white ? :black : :white
     end
   end
+
 end
 
 bc = BoardController.new
