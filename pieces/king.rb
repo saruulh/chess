@@ -2,7 +2,7 @@ require_relative '../piece'
 
 class King < Piece
 
-  attr_accessor :curr_pos
+  attr_accessor :curr_pos, :check
   attr_reader :color, :move_vector
 
   def initialize(args)

@@ -41,9 +41,13 @@ class BoardView
 		puts "Ok, #{piece.color}\'s #{piece.class} at #{piece.curr_pos} captures #{capture.color}\'s #{capture.class} at #{capture.curr_pos}"
 	end
 
-	# def check
-	# 	puts "Your King's in check!"
-	# end
+	def check_msg(color)
+		puts
+		puts "-----------------------------"
+		puts "CHECK ----- #{color}\'s King!"
+		puts "-----------------------------"
+		puts
+	end
 
 	# def check_mate
 	# 	puts "Checkmate!"
