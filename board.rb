@@ -105,21 +105,30 @@ class Board
       return if piece.curr_pos % 8 == 7 && (delta == -7 || delta == 1 || delta == 9)
       new_pos = piece.curr_pos + delta
       7.times do
-        return if new_pos % 8 == 0 && (delta == -9 || delta == -1 || delta == 7)
-        return if new_pos % 8 == 7 && (delta == -7 || delta == 1 || delta == 9)
+
+        left_side = new_pos % 8 == 0 && (delta == -9 || delta == -1 || delta == 7)
+        right_side = new_pos % 8 == 7 && (delta == -7 || delta == 1 || delta == 9)
+
         if (0..63).include?(new_pos)
-          if @board[new_pos].opponent?(piece)
+          if @board[new_pos] && @board[new_pos].opponent?(piece)
             @valid_moves << new_pos
             break
-          elsif @board[new_pos].ally?(piece)
+          elsif @board[new_pos] && @board[new_pos].ally?(piece)
             break
           else
             @valid_moves << new_pos
           end
+          if left_side || right_side
+            break
+          end
           new_pos += delta
+
+
         end
       end
     else    # PAWN LOGIC
+      return if piece.curr_pos % 8 == 0 && (delta == -9 || delta == 7)
+      return if piece.curr_pos % 8 == 7 && (delta == -7 || delta == 9)
       new_pos = piece.curr_pos + delta
       moving_forward = delta == 8 || delta == -8 || delta == 16 || delta == -16
       if (0..63).include?(new_pos)
@@ -152,7 +161,15 @@ class Board
           get_valid_moves(piece, delta)
         end
       else
-        move_vector = piece.get_move_vector
+        if (8..15).include?(piece.curr_pos) && piece.color == :white ||
+          (48..55).include?(piece.curr_pos) && piece.color == :black
+          move_vector = piece.get_move_vector
+          move_vector -= piece.color == :white && @board[piece.curr_pos + 8] && @board[piece.curr_pos + 8].color == :white ? [16] : [0]
+          move_vector -= piece.color == :black && @board[piece.curr_pos - 8] && @board[piece.curr_pos - 8].color == :black ? [-16] : [0]
+        else
+          move_vector = piece.move_vector
+          move_vector -= piece.color == :white ? [16] : [-16]
+        end
         move_vector.each do |delta|
           get_valid_moves(piece, delta)
         end
@@ -163,10 +180,10 @@ class Board
   def in_check?
     valid_moves = []
     @board.each do |position, piece|
-      king_pos = piece.color == :w ? white_King_pos : black_King_pos
+      king_pos = piece.color == :white ? white_King_pos : black_King_pos
       if piece.opponent?hite
         valid_moves << piece.valid_move_loop
-        board[king_pos].check = valid_moves.includes?(king_pos)
+        board[king_pos].check = valid_moves.include?(king_pos)
       end
     end
   end

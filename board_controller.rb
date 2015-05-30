@@ -47,7 +47,7 @@ class BoardController
         piece.curr_pos = next_pos
         @board.to_s
         if capture
-          @view.capture_msg
+          @view.capture_msg(piece, capture)
         else
           @view.complete_move(piece, pos)
         end
