@@ -8,31 +8,31 @@ class Piece
   end
 
   def white
-  	@color = :w
+  	@color = :white
   end
 
   def white?
-  	@color == :w
+  	@color == :white
   end
 
   def black
-  	@color = :b
+  	@color = :black
   end
 
   def black?
-  	@color == :b
+  	@color == :black
   end
 
   def oppposite_color
-  	white? ? black : white
+  	white? ? :black : :white
   end
 
   def opponent?(piece)
-  	piece.kind_of?(piece) && piece.color == oppposite_color
+  	piece.kind_of?(piece.class) && piece.color == oppposite_color
   end
 
   def ally?(piece)
-  	piece.kind_of?(piece) && piece.color == color
+  	piece.kind_of?(piece.class) && piece.color == color
   end
 
 end

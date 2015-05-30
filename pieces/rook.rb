@@ -3,7 +3,7 @@ require_relative '../piece'
 class Rook < Piece
 
   attr_accessor :curr_pos
-  attr_reader :color
+  attr_reader :color, :move_vector
 
   def initialize(args)
     @curr_pos = args[:curr_pos]
