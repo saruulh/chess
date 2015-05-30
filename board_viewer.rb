@@ -5,11 +5,7 @@ class BoardView
 	end
 
 	def prompt_piece(color)
-		print "#{color}, which piece would you like to move?"
-	end
-
-	def select_piece	
-		piece = gets.chomp
+		print "#{color}, which piece would you like to move?\n"
 	end
 
 	def valid_moves(piece, valid)
@@ -18,10 +14,6 @@ class BoardView
 
 	def prompt_move(piece, move)
 		print "Where would you like to move #{piece.color} #{piece.class}?"
-	end
-
-	def next_move
-		move = gets.chomp
 	end
 
 	def complete_move(piece, old_position)
