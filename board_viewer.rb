@@ -9,7 +9,8 @@ class BoardView
 	end
 
 	def valid_moves(piece, valid)
-		puts "Moves for #{piece.color}\'s #{piece.class} #{piece.curr_pos}: #{valid}."
+		puts "Moves for #{piece.color}\'s #{piece.class} #{piece.curr_pos}: #{valid}.\n"
+		puts
 	end
 
 	def choose_your_own_color
@@ -34,11 +35,13 @@ class BoardView
 	end
 
 	def complete_move(piece, old_position)
-		puts "Ok, #{piece.color}\'s #{piece.class} from #{old_position} to #{piece.curr_pos}."
+		puts "Ok, #{piece.color}\'s #{piece.class} from #{old_position} to #{piece.curr_pos}.\n"
+		puts
 	end
 
 	def capture_msg(piece, capture)
-		puts "Ok, #{piece.color}\'s #{piece.class} at #{piece.curr_pos} captures #{capture.color}\'s #{capture.class} at #{capture.curr_pos}"
+		puts "Ok, #{piece.color}\'s #{piece.class} at #{piece.curr_pos} captures #{capture.color}\'s #{capture.class} at #{capture.curr_pos}\n"
+		puts
 	end
 
 	def check_msg(color)
