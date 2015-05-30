@@ -1,5 +1,6 @@
 require_relative 'board'
 require_relative 'board_viewer'
+require_relative 'pieces/king'
 # require_relative 'piece'
 
 class BoardController
@@ -7,6 +8,7 @@ class BoardController
   def initialize
     @view = BoardView.new
     @board = Board.new
+    @king_pos = { white: 4, black: 60 }
   end
 
   def run
@@ -45,12 +47,24 @@ class BoardController
         capture = @board.board[next_pos]
         @board.board[next_pos] = piece
         piece.curr_pos = next_pos
-        @board.to_s
+
+        @king_pos[piece.color] = next_pos if piece.kind_of?(King)
+
+
         if capture
           @view.capture_msg(piece, capture)
         else
           @view.complete_move(piece, pos)
         end
+
+        opposite_color = @board.whose_turn == :white ? :black : :white
+        @board.valid_move_loop(piece)
+        valid_moves = @board.valid_moves
+        if valid_moves.include?(@king_pos[opposite_color])
+          # CHECK
+          @view.check_msg(opposite_color)
+        end
+
         @board.valid_moves = []
       end
       @board.whose_turn = @board.whose_turn == :white ? :black : :white

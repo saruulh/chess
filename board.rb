@@ -7,9 +7,9 @@ require_relative 'pieces/king'
 
 class Board
 
-  attr_accessor :board, :whose_turn, :valid_moves
+  attr_accessor :board, :whose_turn, :valid_moves, :white_king_pos, :black_king_pos
 
-  def initialize (white_King_pos = 4, black_King_pos = 60)
+  def initialize (white_king_pos = 4, black_king_pos = 60)
     @valid_moves = []
     @whose_turn = :white
     @board = {
@@ -180,7 +180,7 @@ class Board
   def in_check?
     valid_moves = []
     @board.each do |position, piece|
-      king_pos = piece.color == :white ? white_King_pos : black_King_pos
+      king_pos = piece.color == :white ? white_king_pos : black_king_pos
       if piece.opponent?hite
         valid_moves << piece.valid_move_loop
         board[king_pos].check = valid_moves.include?(king_pos)
