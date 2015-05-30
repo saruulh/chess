@@ -11,7 +11,7 @@ class Pawn < Piece
   end
 
   def get_move_vector
-    if @color == :w
+    if @color == :white
       @move_vector = [7, 8, 9]
       @move_vector << 16 if (8..15).include?(@curr_pos)
     else
