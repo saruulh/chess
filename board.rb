@@ -180,12 +180,16 @@ class Board
   end
 
   def in_check?
-    # valid_moves = []
+    @valid_moves = []
     color_to_check = @whose_turn == :white ? :black : :white
     king_pos = @king_pos[@whose_turn]
+    p king_pos
     @board.each do |position, piece|
       if piece && (piece.color == color_to_check)
+        #p piece
         valid_move_loop(piece)
+        #p @valid_moves
+        #p king_pos
         return true if @valid_moves.include?(king_pos)
       end
     end
