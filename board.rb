@@ -7,10 +7,12 @@ require_relative 'pieces/king'
 
 class Board
 
-  attr_accessor :board
+  attr_accessor :board, :whose_turn
+  attr_reader :valid_moves
 
   def initialize (white_King_pos = 4, black_King_pos = 60)
     @valid_moves = []
+    @whose_turn = "white"
     @board = {
       0 => Rook.new(color: "w", curr_pos: 0),
       1 => Knight.new(color: "w", curr_pos: 1),
@@ -86,18 +88,18 @@ class Board
     if piece.kind_of?(King) || piece.kind_of?(Knight)
       new_pos = piece.curr_pos + delta
       if (0..63).include?(new_pos)
-        return new_pos if @board[new_pos].opponent?
-        return if @board[new_pos].ally?
+        return new_pos if @board[new_pos].opponent?(piece)
+        return if @board[new_pos].ally?(piece)
         return new_pos
       end
     elsif piece.kind_of?(Queen) || piece.kind_of?(Rook) || piece.kind_of?(Bishop)
       new_pos = piece.curr_pos + delta
       7.times do
         if (0..63).include?(new_pos)
-          if @board[new_pos].opponent?
+          if @board[new_pos].opponent?(piece)
             @valid_moves << new_pos
             break
-          elsif @board[new_pos].ally?
+          elsif @board[new_pos].ally?(piece)
             break
           else
             @valid_moves << new_pos
@@ -105,18 +107,23 @@ class Board
           new_pos += delta
         end
       end
-    else
+    else    # PAWN LOGIC
       new_pos = piece.curr_pos + delta
-      moving_forward = delta == 8 || delta == -8
+      moving_forward = delta == 8 || delta == -8 || delta == 16 || delta == -16
       if (0..63).include?(new_pos)
-        if moving_forward && (@board[new_pos].opponent? || @board[new_pos].ally?)
+        if moving_forward && @board[new_pos].nil?
+          @valid_moves << new_pos
+        elsif !moving_forward && @board[new_pos].nil?
           return
-        elsif @board[new_pos].opponent?
-          return new_pos
-        elsif @board[new_pos].ally?
+        elsif moving_forward && (@board[new_pos].opponent?(piece) || @board[new_pos].ally?(piece))
+          return
+        elsif @board[new_pos].opponent?(piece)
+          p @board[new_pos].opponent?(piece)
+          @valid_moves << new_pos
+        elsif @board[new_pos].ally?(piece)
           return
         elsif moving_forward
-          return new_pos
+          @valid_moves << new_pos
         end
       end
     end
@@ -125,16 +132,16 @@ class Board
   def valid_move_loop(piece)
     if piece.kind_of?(King) || piece.kind_of?(Knight)
       piece.move_vector.each do |delta|
-        @valid_moves << get_valid_moves(piece)
+        get_valid_moves(piece, delta)
       end
     elsif piece.kind_of?(Queen) || piece.kind_of?(Rook) || piece.kind_of?(Bishop)
       piece.move_vector.each do |delta|
-        get_valid_moves(delta)
+        get_valid_moves(piece, delta)
       end
     else
-      move_vector = piece.getto move_vector
+      move_vector = piece.get_move_vector
       move_vector.each do |delta|
-        @valid_moves << get_valid_moves(delta)
+        get_valid_moves(piece, delta)
       end
     end
   end
