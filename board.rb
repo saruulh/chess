@@ -85,6 +85,64 @@ class Board
     }
   end
 
+  def valid_move_loop(piece)
+    unless piece.nil?
+      if piece.kind_of?(Pawn)
+        if (8..15).include?(piece.curr_pos) && piece.color == :white ||
+          (48..55).include?(piece.curr_pos) && piece.color == :black
+          move_vector = piece.get_move_vector
+          move_vector -= piece.color == :white && @board[piece.curr_pos + 8] && @board[piece.curr_pos + 8].color == :white ? [16] : [0]
+          move_vector -= piece.color == :black && @board[piece.curr_pos - 8] && @board[piece.curr_pos - 8].color == :black ? [-16] : [0]
+        else
+          move_vector = piece.move_vector
+          move_vector -= piece.color == :white ? [16] : [-16]
+        end
+        move_vector.each do |delta|
+          get_valid_moves(piece, delta)
+        end
+      else
+        piece.move_vector.each do |delta|
+          get_valid_moves(piece, delta)
+        end
+      end
+    end
+  end
+
+  def in_check?
+    @valid_moves = []
+    color_to_check = @whose_turn == :white ? :black : :white
+    king_pos = @king_pos[@whose_turn]
+    @board.each do |position, piece|
+      if piece && (piece.color == color_to_check)
+        valid_move_loop(piece)
+        return true if @valid_moves.include?(king_pos)
+      end
+    end
+    return false
+  end
+
+  def to_s
+    arr = []
+    disp_arr = []
+    @board.each do |position, piece|
+      if piece
+        arr << icon(piece)
+      else
+        arr << " "
+      end
+    end
+    disp_arr = arr.each_slice(8).to_a.reverse
+    mult = 7
+    8.times do |counter|
+      print "#{8 * mult}  " + disp_arr[counter].join('  ') + "\n"
+      counter -= 1
+      mult -= 1
+    end
+    print "   0  1  2  3  4  5  6  7\n"
+  end
+
+  private
+
   def get_valid_moves(piece, delta)
     if piece.kind_of?(King) || piece.kind_of?(Knight)
       return if piece.curr_pos % 8 == 0 && (delta == 15 || delta == -17 || delta == -9 || delta == -1 || delta == 7)
@@ -124,8 +182,6 @@ class Board
             break
           end
           new_pos += delta
-
-
         end
       end
     else    # PAWN LOGIC
@@ -149,64 +205,6 @@ class Board
         end
       end
     end
-  end
-
-  def valid_move_loop(piece)
-    unless piece.nil?
-      if piece.kind_of?(King) || piece.kind_of?(Knight)
-        piece.move_vector.each do |delta|
-          get_valid_moves(piece, delta)
-        end
-      elsif piece.kind_of?(Queen) || piece.kind_of?(Rook) || piece.kind_of?(Bishop)
-        piece.move_vector.each do |delta|
-          get_valid_moves(piece, delta)
-        end
-      else
-        if (8..15).include?(piece.curr_pos) && piece.color == :white ||
-          (48..55).include?(piece.curr_pos) && piece.color == :black
-          move_vector = piece.get_move_vector
-          move_vector -= piece.color == :white && @board[piece.curr_pos + 8] && @board[piece.curr_pos + 8].color == :white ? [16] : [0]
-          move_vector -= piece.color == :black && @board[piece.curr_pos - 8] && @board[piece.curr_pos - 8].color == :black ? [-16] : [0]
-        else
-          move_vector = piece.move_vector
-          move_vector -= piece.color == :white ? [16] : [-16]
-        end
-        move_vector.each do |delta|
-          get_valid_moves(piece, delta)
-        end
-      end
-    end
-  end
-
-  def in_check?
-    @valid_moves = []
-    color_to_check = @whose_turn == :white ? :black : :white
-    king_pos = @king_pos[@whose_turn]
-    @board.each do |position, piece|
-      if piece && (piece.color == color_to_check)
-        valid_move_loop(piece)
-        return true if @valid_moves.include?(king_pos)
-      end
-    end
-    return false
-  end
-
-  def to_s
-    arr = []
-    disp_arr = []
-    @board.each do |position, piece|
-      if piece
-        arr << icon(piece)
-      else
-        arr << " "
-      end
-    end
-    disp_arr = arr.each_slice(8).to_a.reverse
-    8.times do |counter|
-      print "#{(counter-8).abs} " + disp_arr[counter].join('  ') + "\n"
-      counter -= 1
-    end
-    print "  a  b  c  d  e  f  g  h\n"
   end
 
   def icon(piece)
